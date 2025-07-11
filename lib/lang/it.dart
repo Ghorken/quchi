@@ -5,6 +5,36 @@ class It implements Strings {
   String get title => 'Quchi';
 
   @override
+  String get plantName => 'Nome pianta';
+
+  @override
+  String get endEdit => 'Termina modifica';
+
+  @override
+  String get removePlant => 'Rimuovi pianta';
+
+  @override
+  String get currentDate => 'Data corrente';
+
+  @override
+  String get chooseDate => 'Scegli data';
+
+  @override
+  String get changeColor => 'Cambia colore';
+
+  @override
+  String get emptyDate => 'Data non impostata';
+
+  @override
+  String get wateredOn => 'Innaffiata il:';
+
+  @override
+  String get addPlant => 'Aggiungi pianta';
+
+  @override
+  String get chooseColor => 'Scegli il colore';
+
+  @override
   String get info => 'Informazioni';
 
   @override

@@ -5,6 +5,16 @@ import 'package:quchi/lang/it.dart';
 
 abstract class Strings {
   String get title;
+  String get plantName;
+  String get endEdit;
+  String get removePlant;
+  String get currentDate;
+  String get chooseDate;
+  String get changeColor;
+  String get emptyDate;
+  String get wateredOn;
+  String get addPlant;
+  String get chooseColor;
 
   String get info;
   String get bugRequest;

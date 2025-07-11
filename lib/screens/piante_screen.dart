@@ -92,17 +92,17 @@ class _PianteScreenState extends State<PianteScreen> {
                                 child: TextField(
                                   focusNode: pianta.focusNode,
                                   controller: pianta.controller,
-                                  decoration: InputDecoration(labelText: 'Nome pianta'),
+                                  decoration: InputDecoration(labelText: strings.plantName),
                                   onChanged: (value) {
                                     pianta.nome = value;
                                     salvaPiante();
                                   },
                                 ),
                               ),
-                              IconButton(icon: Icon(Icons.check_circle_outline), tooltip: 'Termina modifica', onPressed: () => rimuoviFocus(index)),
+                              IconButton(icon: Icon(Icons.check_circle_outline), tooltip: strings.endEdit, onPressed: () => rimuoviFocus(index)),
                               IconButton(
                                 icon: Icon(Icons.delete, color: pianta.colore == Colors.red ? Colors.white : Colors.red),
-                                tooltip: 'Rimuovi pianta',
+                                tooltip: strings.removePlant,
                                 onPressed: () => rimuoviPianta(index),
                               ),
                             ],
@@ -110,13 +110,13 @@ class _PianteScreenState extends State<PianteScreen> {
                           SizedBox(height: 8),
                           Row(
                             children: [
-                              ElevatedButton(onPressed: () => aggiornaDataAutomatica(index), child: Text('Data corrente')),
+                              ElevatedButton(onPressed: () => aggiornaDataAutomatica(index), child: Text(strings.currentDate)),
                               SizedBox(width: 8),
-                              IconButton(icon: Icon(Icons.calendar_today), tooltip: 'Scegli data', onPressed: () => scegliDataManuale(index)),
+                              IconButton(icon: Icon(Icons.calendar_today), tooltip: strings.chooseDate, onPressed: () => scegliDataManuale(index)),
                               SizedBox(width: 8),
-                              IconButton(icon: Icon(Icons.color_lens), tooltip: 'Cambia colore', onPressed: () => mostraColorPicker(index)),
+                              IconButton(icon: Icon(Icons.color_lens), tooltip: strings.changeColor, onPressed: () => mostraColorPicker(index)),
                               SizedBox(width: 12),
-                              Expanded(child: Text(pianta.data.isEmpty ? 'Data non impostata' : 'Innaffiata il: ${pianta.data}', style: TextStyle(fontSize: 16))),
+                              Expanded(child: Text(pianta.data.isEmpty ? strings.emptyDate : '${strings.wateredOn} ${pianta.data}', style: TextStyle(fontSize: 16))),
                             ],
                           ),
                         ],
@@ -129,7 +129,7 @@ class _PianteScreenState extends State<PianteScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(onPressed: aggiungiPianta, tooltip: 'Aggiungi pianta', child: Icon(Icons.add)),
+      floatingActionButton: FloatingActionButton(onPressed: aggiungiPianta, tooltip: strings.addPlant, child: Icon(Icons.add)),
       bottomNavigationBar: SizedBox(height: _bannerAd.size.height.toDouble(), width: _bannerAd.size.width.toDouble(), child: AdWidget(ad: _bannerAd)),
     );
   }
@@ -172,7 +172,7 @@ class _PianteScreenState extends State<PianteScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("Scegli un colore"),
+          title: Text(strings.chooseColor),
           content: Wrap(
             spacing: 10,
             children:

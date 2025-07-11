@@ -5,6 +5,36 @@ class En implements Strings {
   String get title => 'Quchi';
 
   @override
+  String get plantName => 'Plant name';
+
+  @override
+  String get endEdit => 'End edit';
+
+  @override
+  String get removePlant => 'Remove plant';
+
+  @override
+  String get currentDate => 'Current date';
+
+  @override
+  String get chooseDate => 'Choose date';
+
+  @override
+  String get changeColor => 'Change color';
+
+  @override
+  String get emptyDate => 'Unsetted date';
+
+  @override
+  String get wateredOn => 'Watered on:';
+
+  @override
+  String get addPlant => 'Add plant';
+
+  @override
+  String get chooseColor => 'Choose color';
+
+  @override
   String get info => 'Infos';
 
   @override
