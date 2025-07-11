@@ -1,0 +1,216 @@
+import 'dart:convert';
+
+import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:intl/intl.dart';
+import 'package:quchi/lang/strings.dart';
+import 'package:quchi/models/pianta.dart';
+import 'package:quchi/screens/info_screen.dart';
+import 'package:quchi/themes/themes.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class PianteScreen extends StatefulWidget {
+  const PianteScreen({super.key});
+
+  @override
+  State<PianteScreen> createState() => _PianteScreenState();
+}
+
+class _PianteScreenState extends State<PianteScreen> {
+  List<Pianta> piante = [];
+  late BannerAd _bannerAd;
+
+  @override
+  void initState() {
+    _bannerAd = BannerAd(
+      adUnitId: 'ca-app-pub-3940256099942544/9214589741',
+      request: const AdRequest(),
+      size: AdSize.fullBanner,
+      listener: BannerAdListener(
+        onAdFailedToLoad: (ad, error) {
+          debugPrint('Banner fallito: $error');
+          ad.dispose();
+        },
+      ),
+    );
+
+    _bannerAd.load();
+
+    caricaPiante();
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _bannerAd.dispose();
+    for (var voce in piante) {
+      voce.focusNode.dispose();
+      voce.controller.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Themes.backgroundColor,
+      appBar: AppBar(
+        title: Text(strings.title),
+        centerTitle: true,
+        backgroundColor: Themes.appBarColor,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.info_outline),
+            onPressed: () {
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const InfoScreen()));
+            },
+          ),
+        ],
+      ),
+      body: Column(
+        spacing: 20.0,
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: piante.length,
+              itemBuilder: (context, index) {
+                final pianta = piante[index];
+
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  child: Card(
+                    color: pianta.colore,
+                    elevation: 3,
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextField(
+                                  focusNode: pianta.focusNode,
+                                  controller: pianta.controller,
+                                  decoration: InputDecoration(labelText: 'Nome pianta'),
+                                  onChanged: (value) {
+                                    pianta.nome = value;
+                                    salvaPiante();
+                                  },
+                                ),
+                              ),
+                              IconButton(icon: Icon(Icons.check_circle_outline), tooltip: 'Termina modifica', onPressed: () => rimuoviFocus(index)),
+                              IconButton(
+                                icon: Icon(Icons.delete, color: pianta.colore == Colors.red ? Colors.white : Colors.red),
+                                tooltip: 'Rimuovi pianta',
+                                onPressed: () => rimuoviPianta(index),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 8),
+                          Row(
+                            children: [
+                              ElevatedButton(onPressed: () => aggiornaDataAutomatica(index), child: Text('Data corrente')),
+                              SizedBox(width: 8),
+                              IconButton(icon: Icon(Icons.calendar_today), tooltip: 'Scegli data', onPressed: () => scegliDataManuale(index)),
+                              SizedBox(width: 8),
+                              IconButton(icon: Icon(Icons.color_lens), tooltip: 'Cambia colore', onPressed: () => mostraColorPicker(index)),
+                              SizedBox(width: 12),
+                              Expanded(child: Text(pianta.data.isEmpty ? 'Data non impostata' : 'Innaffiata il: ${pianta.data}', style: TextStyle(fontSize: 16))),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(onPressed: aggiungiPianta, tooltip: 'Aggiungi pianta', child: Icon(Icons.add)),
+      bottomNavigationBar: SizedBox(height: _bannerAd.size.height.toDouble(), width: _bannerAd.size.width.toDouble(), child: AdWidget(ad: _bannerAd)),
+    );
+  }
+
+  void aggiungiPianta() {
+    setState(() {
+      final nuova = Pianta();
+      piante.add(nuova);
+      salvaPiante();
+    });
+  }
+
+  void aggiornaDataAutomatica(int index) {
+    setState(() {
+      piante[index].data = DateFormat('dd/MM/yyyy').format(DateTime.now());
+      salvaPiante();
+    });
+  }
+
+  void scegliDataManuale(int index) async {
+    DateTime? picked = await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(2000), lastDate: DateTime(2100));
+
+    if (picked != null) {
+      setState(() {
+        piante[index].data = DateFormat('dd/MM/yyyy').format(picked);
+        salvaPiante();
+      });
+    }
+  }
+
+  void rimuoviPianta(int index) {
+    setState(() {
+      piante.removeAt(index);
+      salvaPiante();
+    });
+  }
+
+  void mostraColorPicker(int index) async {
+    Color? coloreScelto = await showDialog<Color>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Scegli un colore"),
+          content: Wrap(
+            spacing: 10,
+            children:
+                [Colors.white, Colors.red, Colors.green, Colors.blue, Colors.yellow, Colors.orange, Colors.purple, Colors.grey, Colors.brown].map((color) {
+                  return GestureDetector(onTap: () => Navigator.of(context).pop(color), child: CircleAvatar(backgroundColor: color, radius: 20));
+                }).toList(),
+          ),
+        );
+      },
+    );
+
+    if (coloreScelto != null) {
+      setState(() {
+        piante[index].colore = coloreScelto;
+        salvaPiante();
+      });
+    }
+  }
+
+  void rimuoviFocus(int index) {
+    piante[index].focusNode.unfocus();
+  }
+
+  Future<void> salvaPiante() async {
+    final prefs = await SharedPreferences.getInstance();
+    final listaJson = jsonEncode(piante.map((p) => p.toJson()).toList());
+    await prefs.setString('piante', listaJson);
+  }
+
+  Future<void> caricaPiante() async {
+    final prefs = await SharedPreferences.getInstance();
+    final jsonString = prefs.getString('piante');
+
+    if (jsonString != null) {
+      final List<dynamic> jsonList = jsonDecode(jsonString);
+      setState(() {
+        piante = jsonList.map((json) => Pianta.fromJson(json)).toList();
+      });
+    }
+  }
+}

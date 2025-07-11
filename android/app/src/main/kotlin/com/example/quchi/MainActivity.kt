@@ -1,4 +1,4 @@
-package com.example.quchi
+package mf.smithingthings.quchi
 
 import io.flutter.embedding.android.FlutterActivity
 
