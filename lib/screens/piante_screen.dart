@@ -85,6 +85,7 @@ class _PianteScreenState extends State<PianteScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
                       child: Column(
+                        spacing: 8.0,
                         children: [
                           Row(
                             children: [
@@ -100,6 +101,7 @@ class _PianteScreenState extends State<PianteScreen> {
                                 ),
                               ),
                               IconButton(icon: Icon(Icons.check_circle_outline), tooltip: strings.endEdit, onPressed: () => rimuoviFocus(index)),
+                              IconButton(icon: Icon(Icons.color_lens), tooltip: strings.changeColor, onPressed: () => mostraColorPicker(index)),
                               IconButton(
                                 icon: Icon(Icons.delete, color: pianta.colore == Colors.red ? Colors.white : Colors.red),
                                 tooltip: strings.removePlant,
@@ -107,16 +109,30 @@ class _PianteScreenState extends State<PianteScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(height: 8),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              ElevatedButton(onPressed: () => aggiornaDataAutomatica(index), child: Text(strings.currentDate)),
-                              SizedBox(width: 8),
-                              IconButton(icon: Icon(Icons.calendar_today), tooltip: strings.chooseDate, onPressed: () => scegliDataManuale(index)),
-                              SizedBox(width: 8),
-                              IconButton(icon: Icon(Icons.color_lens), tooltip: strings.changeColor, onPressed: () => mostraColorPicker(index)),
-                              SizedBox(width: 12),
-                              Expanded(child: Text(pianta.data.isEmpty ? strings.emptyDate : '${strings.wateredOn} ${pianta.data}', style: TextStyle(fontSize: 16))),
+                              ElevatedButton(onPressed: () => aggiornaDataAutomatica(index, true), child: Text(strings.currentDate)),
+                              IconButton(icon: Icon(Icons.calendar_today), tooltip: strings.chooseDate, onPressed: () => scegliDataManuale(index, true)),
+                              Expanded(
+                                child: Text(
+                                  pianta.dataInnaffiamento.isEmpty ? strings.emptyDate : '${strings.wateredOn} ${pianta.dataInnaffiamento}',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ElevatedButton(onPressed: () => aggiornaDataAutomatica(index, false), child: Text(strings.currentDate)),
+                              IconButton(icon: Icon(Icons.calendar_today), tooltip: strings.chooseDate, onPressed: () => scegliDataManuale(index, false)),
+                              Expanded(
+                                child: Text(
+                                  pianta.dataConcimazione.isEmpty ? strings.emptyDate : '${strings.concimatedOn} ${pianta.dataConcimazione}',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ),
                             ],
                           ),
                         ],
@@ -142,19 +158,21 @@ class _PianteScreenState extends State<PianteScreen> {
     });
   }
 
-  void aggiornaDataAutomatica(int index) {
+  void aggiornaDataAutomatica(int index, bool innaffiamento) {
     setState(() {
-      piante[index].data = DateFormat('dd/MM/yyyy').format(DateTime.now());
+      innaffiamento
+          ? piante[index].dataInnaffiamento = DateFormat('dd/MM/yyyy').format(DateTime.now())
+          : piante[index].dataConcimazione = DateFormat('dd/MM/yyyy').format(DateTime.now());
       salvaPiante();
     });
   }
 
-  void scegliDataManuale(int index) async {
+  void scegliDataManuale(int index, bool innaffiamento) async {
     DateTime? picked = await showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(2000), lastDate: DateTime(2100));
 
     if (picked != null) {
       setState(() {
-        piante[index].data = DateFormat('dd/MM/yyyy').format(picked);
+        innaffiamento ? piante[index].dataInnaffiamento = DateFormat('dd/MM/yyyy').format(picked) : piante[index].dataConcimazione = DateFormat('dd/MM/yyyy').format(picked);
         salvaPiante();
       });
     }

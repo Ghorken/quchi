@@ -29,6 +29,9 @@ class It implements Strings {
   String get wateredOn => 'Innaffiata il:';
 
   @override
+  String get concimatedOn => 'Concimata il:';
+
+  @override
   String get addPlant => 'Aggiungi pianta';
 
   @override

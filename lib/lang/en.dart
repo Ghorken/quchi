@@ -29,6 +29,9 @@ class En implements Strings {
   String get wateredOn => 'Watered on:';
 
   @override
+  String get concimatedOn => 'Concimated on:';
+
+  @override
   String get addPlant => 'Add plant';
 
   @override

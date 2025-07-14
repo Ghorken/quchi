@@ -13,6 +13,7 @@ abstract class Strings {
   String get changeColor;
   String get emptyDate;
   String get wateredOn;
+  String get concimatedOn;
   String get addPlant;
   String get chooseColor;
 
