@@ -100,8 +100,16 @@ class _PianteScreenState extends State<PianteScreen> {
                                   },
                                 ),
                               ),
-                              IconButton(icon: Icon(Icons.check_circle_outline), tooltip: strings.endEdit, onPressed: () => rimuoviFocus(index)),
-                              IconButton(icon: Icon(Icons.color_lens), tooltip: strings.changeColor, onPressed: () => mostraColorPicker(index)),
+                              IconButton(
+                                icon: Icon(Icons.check_circle_outline, color: (pianta.colore == Colors.white || pianta.colore == Colors.yellow) ? Colors.black : Colors.white),
+                                tooltip: strings.endEdit,
+                                onPressed: () => rimuoviFocus(index),
+                              ),
+                              IconButton(
+                                icon: Icon(Icons.color_lens, color: (pianta.colore == Colors.white || pianta.colore == Colors.yellow) ? Colors.black : Colors.white),
+                                tooltip: strings.changeColor,
+                                onPressed: () => mostraColorPicker(index),
+                              ),
                               IconButton(
                                 icon: Icon(Icons.delete, color: pianta.colore == Colors.red ? Colors.white : Colors.red),
                                 tooltip: strings.removePlant,
@@ -113,7 +121,11 @@ class _PianteScreenState extends State<PianteScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               ElevatedButton(onPressed: () => aggiornaDataAutomatica(index, true), child: Text(strings.currentDate)),
-                              IconButton(icon: Icon(Icons.calendar_today), tooltip: strings.chooseDate, onPressed: () => scegliDataManuale(index, true)),
+                              IconButton(
+                                icon: Icon(Icons.calendar_today, color: (pianta.colore == Colors.white || pianta.colore == Colors.yellow) ? Colors.black : Colors.white),
+                                tooltip: strings.chooseDate,
+                                onPressed: () => scegliDataManuale(index, true),
+                              ),
                               Expanded(
                                 child: Text(
                                   pianta.dataInnaffiamento.isEmpty ? strings.emptyDate : '${strings.wateredOn} ${pianta.dataInnaffiamento}',
@@ -126,7 +138,11 @@ class _PianteScreenState extends State<PianteScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               ElevatedButton(onPressed: () => aggiornaDataAutomatica(index, false), child: Text(strings.currentDate)),
-                              IconButton(icon: Icon(Icons.calendar_today), tooltip: strings.chooseDate, onPressed: () => scegliDataManuale(index, false)),
+                              IconButton(
+                                icon: Icon(Icons.calendar_today, color: (pianta.colore == Colors.white || pianta.colore == Colors.yellow) ? Colors.black : Colors.white),
+                                tooltip: strings.chooseDate,
+                                onPressed: () => scegliDataManuale(index, false),
+                              ),
                               Expanded(
                                 child: Text(
                                   pianta.dataConcimazione.isEmpty ? strings.emptyDate : '${strings.concimatedOn} ${pianta.dataConcimazione}',
