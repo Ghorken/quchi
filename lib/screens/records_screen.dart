@@ -78,13 +78,23 @@ class _RecordsScreenState extends State<RecordsScreen> {
         spacing: 20.0,
         children: [
           Expanded(
-            child: ListView.builder(
+            child: ReorderableListView.builder(
               itemCount: records.length,
+              buildDefaultDragHandles: false,
+              onReorder: (int oldIndex, int newIndex) {
+                setState(() {
+                  if (newIndex > oldIndex) newIndex -= 1;
+                  final record = records.removeAt(oldIndex);
+                  records.insert(newIndex, record);
+                  saveRecords();
+                });
+              },
               itemBuilder: (context, index) {
                 Record record;
                 record = records[index];
 
                 return Padding(
+                  key: ValueKey(record),
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   child: Card(
                     color: record.color,
@@ -96,6 +106,10 @@ class _RecordsScreenState extends State<RecordsScreen> {
                         children: [
                           Row(
                             children: [
+                              ReorderableDragStartListener(
+                                index: index,
+                                child: const Padding(padding: EdgeInsets.only(right: 8.0), child: Icon(Icons.drag_indicator, color: Colors.white)),
+                              ),
                               Expanded(
                                 child: TextField(
                                   focusNode: record.focusNode,
