@@ -5,16 +5,19 @@ class En implements Strings {
   String get title => 'Quchi';
 
   @override
-  String get plantName => 'Plant name';
+  String get recordName => 'Name';
 
   @override
   String get endEdit => 'End edit';
 
   @override
-  String get removePlant => 'Remove plant';
+  String get removeRecord => 'Remove plant';
 
   @override
   String get currentDate => 'Current date';
+
+  @override
+  String get currentHour => 'Current hour';
 
   @override
   String get chooseDate => 'Choose date';
@@ -23,16 +26,76 @@ class En implements Strings {
   String get changeColor => 'Change color';
 
   @override
-  String get emptyDate => 'Unsetted date';
+  String get emptyDate => 'Unsetted';
+
+  @override
+  String get plantName => 'Plant name';
 
   @override
   String get wateredOn => 'Watered on:';
 
   @override
-  String get concimatedOn => 'Concimated on:';
+  String get fertilizedOn => 'Fertilized on:';
+
+  @override
+  String get babyName => 'Baby name';
+
+  @override
+  String get poopedAt => 'Pooped at:';
+
+  @override
+  String get peedAt => 'Peeed at:';
+
+  @override
+  String get eatedAt => 'Eated at:';
+
+  @override
+  String get petName => 'Pet name';
+
+  @override
+  String get poopedOn => 'Pooped on:';
+
+  @override
+  String get bedCleanedOn => 'Bed cleaned on:';
+
+  @override
+  String get homeName => 'Home name';
+
+  @override
+  String get showerCleanedOn => 'Shower cleaned on:';
+
+  @override
+  String get windowsCleanedOn => 'Windows cleaned on:';
+
+  @override
+  String get fridgeCleanedOn => 'Fridge cleaned on:';
+
+  @override
+  String get freezerCleanedOn => 'Freezer cleaned on:';
+
+  @override
+  String get medicineName => 'Medicine name';
+
+  @override
+  String get takenOn => 'Taken on:';
+
+  @override
+  String get takenAt => 'Taken at:';
 
   @override
   String get addPlant => 'Add plant';
+
+  @override
+  String get addBaby => 'Add baby';
+
+  @override
+  String get addPet => 'Add pet';
+
+  @override
+  String get addHome => 'Add home';
+
+  @override
+  String get addMedicine => 'Add medicine';
 
   @override
   String get chooseColor => 'Choose color';
