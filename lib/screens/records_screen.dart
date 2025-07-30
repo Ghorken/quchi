@@ -29,7 +29,7 @@ class _RecordsScreenState extends State<RecordsScreen> {
   @override
   void initState() {
     _bannerAd = BannerAd(
-      adUnitId: 'ca-app-pub-3940256099942544/9214589741',
+      adUnitId: 'ca-app-pub-8318465197221595~5477114344',
       request: const AdRequest(),
       size: AdSize.fullBanner,
       listener: BannerAdListener(
