@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
 import 'package:quchi/lang/strings.dart';
 import 'package:quchi/models/baby.dart';
@@ -24,24 +23,9 @@ class RecordsScreen extends StatefulWidget {
 
 class _RecordsScreenState extends State<RecordsScreen> {
   List<Record> records = [];
-  late BannerAd _bannerAd;
 
   @override
   void initState() {
-    _bannerAd = BannerAd(
-      adUnitId: 'ca-app-pub-8318465197221595/7692214142',
-      request: const AdRequest(),
-      size: AdSize.fullBanner,
-      listener: BannerAdListener(
-        onAdFailedToLoad: (ad, error) {
-          debugPrint('Banner fallito: $error');
-          ad.dispose();
-        },
-      ),
-    );
-
-    _bannerAd.load();
-
     loadRecords();
 
     super.initState();
@@ -49,7 +33,6 @@ class _RecordsScreenState extends State<RecordsScreen> {
 
   @override
   void dispose() {
-    _bannerAd.dispose();
     for (Record record in records) {
       record.focusNode.dispose();
       record.controller.dispose();
@@ -146,7 +129,6 @@ class _RecordsScreenState extends State<RecordsScreen> {
           SpeedDialChild(child: Icon(Icons.medication), label: strings.addMedicine, onTap: () => addRecord(RecordType.medicine)),
         ],
       ),
-      bottomNavigationBar: SizedBox(height: _bannerAd.size.height.toDouble(), width: _bannerAd.size.width.toDouble(), child: AdWidget(ad: _bannerAd)),
     );
   }
 
